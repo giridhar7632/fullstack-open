@@ -1,46 +1,55 @@
 import React from 'react'
 
 const Header = (props) => {
-return <h1>{ props.course.name }</h1>
+  return <h1>{props.course.name}</h1>
 }
 
-const Part = ({ name, exercises}) => {
-  return <p>{name}: <b>{exercises}</b></p>
+const Part = ({ name, exercises }) => {
+  return (
+    <p>
+      {name}: <b>{exercises}</b>
+    </p>
+  )
 }
 
 const Content = ({ parts }) => {
-return(
-  <>
-    {parts.parts.map((i) => <Part key={i.name} name={i.name} exercises={i.exercises} />
-    )}
-  </>
-)
+  return (
+    <>
+      {parts.parts.map((i) => (
+        <Part key={i.name} name={i.name} exercises={i.exercises} />
+      ))}
+    </>
+  )
 }
 
 const Total = ({ parts }) => {
   let sum = 0
-  parts.parts.forEach((i) => sum += i.exercises)
-return <p>Total Exercises: <b>{ sum }</b></p>
+  parts.parts.forEach((i) => (sum += i.exercises))
+  return (
+    <p>
+      Total Exercises: <b>{sum}</b>
+    </p>
+  )
 }
 
 const App = () => {
   const course = {
-    name: "Half Stack application development",
+    name: 'Half Stack application development',
     parts: [
       {
-        name: "Fundamentals of React",
+        name: 'Fundamentals of React',
         exercises: 10,
       },
       {
-        name: "Using props to pass data",
+        name: 'Using props to pass data',
         exercises: 7,
       },
       {
-        name: "State of a component",
+        name: 'State of a component',
         exercises: 14,
       },
     ],
-  };
+  }
 
   return (
     <>
@@ -51,4 +60,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App
