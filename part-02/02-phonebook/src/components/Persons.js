@@ -1,13 +1,19 @@
 import React from 'react'
+import Person from './Person'
 
 const Persons = (props) => {
   return (
     <>
-      {props.persons.map((person) => (
-        <p>
-          {person.name} - {person.number}
-        </p>
-      ))}
+      {props.persons.map((person) =>
+        person.name.toLowerCase().includes(props.filter.toLowerCase())
+          ? [
+              <Person
+                key={person.name}
+                person={person}
+              />,
+            ]
+          : []
+      )}
     </>
   )
 }
