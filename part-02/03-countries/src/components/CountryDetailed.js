@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const CountryDetailed = ({ country }) => {
+  const { name, capital, population, languages, flag } = country
+
   const [temperature, setTemperature] = useState('')
   const [icon, setIcon] = useState('')
   const [iconWord, setIconWord] = useState('')
@@ -23,23 +25,23 @@ const CountryDetailed = ({ country }) => {
         setWind(res.data.wind.speed)
         setWindDirection(res.data.wind.deg)
       })
-  }, [])
+  }, [api_key, country.capital])
 
   return (
     <div>
-      <h1>{country.name}</h1>
-      <div>capital {country.capital}</div>
-      <div>population {country.population}</div>
+      <h1>{name}</h1>
+      <div>capital {capital}</div>
+      <div>population {population}</div>
       <h2>languages</h2>
       <ul>
-        {country.languages.map((language) => (
+        {languages.map((language) => (
           <li key={language.iso639_2}>{language.name}</li>
         ))}
       </ul>
       <div>
-        <img src={country.flag} height='128' alt={country.name} />
+        <img src={flag} height="128" alt={country.name} />
       </div>
-      <h2>Weather in {country.capital}</h2>
+      <h2>Weather in {capital}</h2>
       <div>
         <b>temperature: </b>
         {temperature} °C

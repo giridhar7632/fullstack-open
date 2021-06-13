@@ -1,32 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import Countries from './components/Countries'
-import Filter from './components/Filter'
 
-const App = () => {
-  const [countries, setCountries] = useState([])
-  const [filter, setFilter] = useState('')
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    console.log('effect')
-    axios.get(`https://restcountries.eu/rest/v2/all/`).then((response) => {
-      console.log('promise fulfilled')
-      setCountries(response.data)
-    })
-  }, [])
-
-  return (
-    <>
-      <Filter filter={filter} setFilter={setFilter} setShow={setShow} />
-      <Countries
-        countries={countries}
-        filter={filter}
-        show={show}
-        setShow={setShow}
-      />
-    </>
-  )
+const style = {
+  margin: '20px',
 }
 
+const App = () => {
+  const [filter, setFilter] = useState('')
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    setFilter(e.target.value)
+  }
+
+  return (
+    <div style={style}>
+      <div>
+        find countries <input onChange={handleChange} value={filter}></input>
+      </div>
+      <Countries filter={filter} />
+    </div>
+  )
+}
 export default App
