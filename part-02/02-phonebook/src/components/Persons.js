@@ -1,21 +1,14 @@
 import React from 'react'
-import Person from './Person'
 
-const Persons = (props) => {
-  return (
-    <>
-      {props.persons.map((person) =>
-        person.name.toLowerCase().includes(props.filter.toLowerCase())
-          ? [
-              <Person
-                key={person.name}
-                person={person}
-              />,
-            ]
-          : []
-      )}
-    </>
-  )
+const Persons = ({ filterPersons, handleDelete }) => {
+  return filterPersons.map((person) => (
+    <p key={person.id}>
+      {person.name} - {person.number}{' '}
+      <button onClick={() => handleDelete(person.id, person.name)}>
+        delete
+      </button>
+    </p>
+  ))
 }
 
 export default Persons

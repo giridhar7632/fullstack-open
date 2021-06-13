@@ -1,34 +1,60 @@
-import React, { useState } from 'react'
-import Filter from './components/Filter'
+import React, { useEffect, useState } from 'react'
+import Message from './components/Message'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import { deletePerson, getPersons } from './controllers/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' },
-  ])
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState()
+  const [persons, setPersons] = useState([])
+  const [msg, setMsg] = useState(null)
   const [filter, setFilter] = useState('')
+  const [filterPersons, setFilterPersons] = useState(persons)
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value)
+    setFilterPersons(
+      persons.filter(
+        (person) =>
+          person.name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
+      )
+    )
+  }
+
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete ${name}`)) {
+      deletePerson(id)
+        .then(() => {
+          getPersons().then((data) => setPersons(data))
+        })
+        .catch((error) => {
+          setMsg({ msg: `${name} does not exist`, className: 'error' })
+          setTimeout(() => {
+            setMsg(null)
+          }, 3000)
+        })
+    }
+  }
+
+  useEffect(() => {
+    getPersons().then((data) => setPersons(data))
+  }, [])
 
   return (
     <div>
       <h1>Search for</h1>
-      <Filter filter={filter} setFilter={setFilter} />
+      <div>
+        filter shown with{' '}
+        <input onChange={handleFilterChange} value={filter}></input>
+      </div>
+      <Message notify={msg} />
       <h2>Phonebook</h2>
-      <PersonForm
-        persons={persons}
-        setPersons={setPersons}
-        newName={newName}
-        setNewName={setNewName}
-        newNum={newNum}
-        setNewNum={setNewNum}
-      />
+      <PersonForm persons={persons} setPersons={setPersons} setMsg={setMsg} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      {filter === '' ? (
+        <Persons handleDelete={handleDelete} filterPersons={persons} />
+      ) : (
+        <Persons handleDelete={handleDelete} filterPersons={filterPersons} />
+      )}
     </div>
   )
 }
