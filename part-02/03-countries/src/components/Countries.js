@@ -1,30 +1,39 @@
-import React from 'react'
-import Country from './Country'
+import React, { useState, useEffect } from 'react'
 import CountryDetailed from './CountryDetailed'
+import axios from 'axios'
 
-const Countries = (props) => {
-  const filteredCountries = props.countries.map((country) =>
-    country.name.toLowerCase().includes(props.filter.toLowerCase())
-      ? country
-      : []
-  )
+const Countries = ({ filter }) => {
+  const [countries, setCountries] = useState([])
+  const [country, setCountry] = useState({})
 
-  if (!props.show) {
-    if (filteredCountries.length >= 2 && filteredCountries.length <= 10) {
-      return filteredCountries.map((country) => (
-        <div key={country.name}>
-          <Country country={country} />{' '}
-          <button onClick={() => props.setShow(country)}>show</button>
-        </div>
-      ))
-    } else if (filteredCountries.length === 1) {
-      return <CountryDetailed country={filteredCountries[0]} />
-    } else {
-      return <>Too many matches, specify another filter</>
+  useEffect(() => {
+    if (filter !== '') {
+      axios
+        .get(`https://restcountries.eu/rest/v2/name/${filter}`)
+        .then((response) => {
+          setCountries(response.data)
+        })
     }
-  } else {
-    return <CountryDetailed country={props.countries[0].country} />
+  })
+
+  const handleShow = (country) => {
+    setCountry(country)
   }
+
+  return (
+    <div>
+      {countries.length > 10 && <p>too many matches, specify another filter</p>}
+      {countries.length < 10 &&
+        countries.length !== 1 &&
+        countries.map((country) => (
+          <div key={country.name}>
+            {country.name}
+            <button onClick={() => handleShow(country)}>show</button>
+          </div>
+        ))}
+      {country.languages !== undefined && <CountryDetailed country={country} />}
+    </div>
+  )
 }
 
 export default Countries
