@@ -3,7 +3,7 @@ import { addPerson, updatePerson } from '../controllers/persons'
 
 const PersonForm = ({ setPersons, persons, setMsg }) => {
   const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState()
+  const [newNum, setNewNum] = useState('')
 
   const handleNameChange = (e) => {
     setNewName(e.target.value)

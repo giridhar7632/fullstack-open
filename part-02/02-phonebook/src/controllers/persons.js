@@ -13,11 +13,11 @@ export const addPerson = async (person) => {
 }
 
 export const deletePerson = async (id) => {
-  const res = await axios.delete(`/${url}/${id}`)
+  const res = await axios.delete(`${url}/${id}`)
   return res.data
 }
 
 export const updatePerson = async (newPerson, id) => {
-  const res = await axios.put(`/${url}/${id}`, newPerson)
+  const res = await axios.put(`${url}/${id}`, newPerson)
   return res.data
 }
