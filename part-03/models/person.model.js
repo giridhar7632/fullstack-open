@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+let uniqueValidator = require('mongoose-unique-validator')
 
 // connecting to mongodb atlas
 const uri = process.env.MONGO_URI
@@ -16,12 +17,16 @@ const personSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
+    minlength: [3, 'Name must have atleast 3 characters'],
   },
   number: {
     type: String,
     required: true,
+    minlength: [8, 'Number must have atleast 8 characters'],
   },
 })
+personSchema.plugin(uniqueValidator)
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {

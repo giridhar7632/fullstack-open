@@ -14,7 +14,8 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-morgan.token('post', (req, res) => {
+// eslint-disable-next-line no-unused-vars
+morgan.token('post', (req, _) => {
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
   } else {
@@ -29,7 +30,7 @@ app.use(morgan('logg'))
 
 app.get('/info', async (_, res) => {
   let date = new Date().toUTCString()
-  persons = await Person.find({})
+  let persons = await Person.find({})
   res.send(`Phonebook has total ${persons.length} by \n ${date}`)
 })
 
@@ -65,9 +66,9 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch((error) => next(error))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end()
     })
     .catch((error) => next(error))
@@ -78,7 +79,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     new: true,
     runValidators: true,
   })
-    .then((result) => {
+    .then(() => {
       res.status(204).end()
     })
     .catch((error) => next(error))
