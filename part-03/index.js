@@ -10,8 +10,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
-app.use(express.static('build'))
-
 morgan.token('post', (req, res) => {
 	if (req.method === 'POST') {
 		return JSON.stringify(req.body)
