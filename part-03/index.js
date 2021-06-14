@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -8,6 +9,19 @@ const port = process.env.PORT || 5000
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
+
+morgan.token('post', (req, res) => {
+	if (req.method === 'POST') {
+		return JSON.stringify(req.body)
+	} else {
+		return ''
+	}
+})
+morgan.format(
+	'logg',
+	':method :url :status :res[content-length] - :response-time ms :post'
+)
+app.use(morgan('logg'))
 
 let persons = [
 	{

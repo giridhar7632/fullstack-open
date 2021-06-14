@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-const url = '../../../db.json'
-console.log(url)
+const url = '/api/persons'
 
 export const getPersons = async () => {
   const res = await axios.get(url)
@@ -14,11 +13,11 @@ export const addPerson = async (person) => {
 }
 
 export const deletePerson = async (id) => {
-  const res = await axios.delete(`${url}/${id}`)
+  const res = await axios.delete(`/${url}/${id}`)
   return res.data
 }
 
 export const updatePerson = async (newPerson, id) => {
-  const res = await axios.put(`${url}/${id}`, newPerson)
+  const res = await axios.put(`/${url}/${id}`, newPerson)
   return res.data
 }
