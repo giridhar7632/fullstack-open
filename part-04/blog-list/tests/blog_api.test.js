@@ -6,12 +6,12 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
-beforeEach(async () => {
-	await Blog.deleteMany({})
-	await Blog.insertMany(initialBlogs)
-})
-
 describe('when there is initially some blogs saved', () => {
+	beforeEach(async () => {
+		await Blog.deleteMany({})
+		await Blog.insertMany(initialBlogs)
+	})
+
 	test('blogs are returned as json', async () => {
 		await api
 			.get('/api/blogs')

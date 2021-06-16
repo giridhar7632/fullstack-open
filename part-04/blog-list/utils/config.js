@@ -7,7 +7,10 @@ const URI =
 		? process.env.TEST_MONGO_URI
 		: process.env.MONGO_URI
 
+const SECRET = process.env.SECRET
+
 module.exports = {
 	URI,
 	PORT,
+	SECRET,
 }
