@@ -8,9 +8,11 @@ const URI =
 		: process.env.MONGO_URI
 
 const SECRET = process.env.SECRET
+const ENV = process.env.NODE_ENV
 
 module.exports = {
 	URI,
 	PORT,
 	SECRET,
+	ENV,
 }

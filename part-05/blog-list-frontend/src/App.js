@@ -16,7 +16,17 @@ const App = () => {
 	const blogFormRef = useRef()
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs))
+		blogService.getAll().then((blogs) =>
+			setBlogs(
+				blogs.sort((a, b) => {
+					let keyA = a.likes
+					let keyB = b.likes
+					if (keyA < keyB) return 1
+					if (keyA > keyB) return -1
+					return 0
+				})
+			)
+		)
 	}, [])
 
 	useEffect(() => {
@@ -84,6 +94,7 @@ const App = () => {
 				<div>
 					<p>{user.name} logged-in</p>
 					<button
+						id='logout'
 						onClick={() =>
 							window.localStorage.removeItem('loggedBlogListUser')
 						}>
@@ -91,15 +102,17 @@ const App = () => {
 					</button>
 					{blogForm()}
 					<h2>Blogs</h2>
-					{blogs.map((blog) => (
-						<Blog
-							key={blog.id}
-							blog={blog}
-							users={user}
-							handleUpdate={blogService.update}
-							handleDelete={blogService.deleteBlog}
-						/>
-					))}
+					<div className='blog-list'>
+						{blogs.map((blog) => (
+							<Blog
+								key={blog.id}
+								blog={blog}
+								user={user}
+								handleUpdate={blogService.update}
+								handleDelete={blogService.deleteBlog}
+							/>
+						))}
+					</div>
 				</div>
 			)}
 		</div>

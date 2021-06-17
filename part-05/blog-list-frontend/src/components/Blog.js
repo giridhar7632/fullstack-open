@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, handleUpdate, handleDelete }) => {
-	const { id, title, author, user, url, likes } = blog
+const Blog = ({ blog, handleUpdate, handleDelete, user }) => {
+	const { id, title, author, url, likes } = blog
 	const [newLikes, setNewLikes] = useState(likes)
 	const blogStyle = {
 		paddingTop: 10,
@@ -12,11 +12,13 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
 		borderWidth: 1,
 		marginBottom: 5,
 	}
+	console.log(user)
+	console.log(blog.user)
 
 	const updateBlog = () => {
 		setNewLikes(newLikes + 1)
 		handleUpdate(id, {
-			user: user._id,
+			user: blog.user._id,
 			likes: newLikes,
 			author: author,
 			title: title,
@@ -33,14 +35,23 @@ const Blog = ({ blog, handleUpdate, handleDelete }) => {
 	return (
 		<div className='blog' style={blogStyle}>
 			{title} —
-			<Togglable buttonLabel='view'>
-				{url}
-				<br />
-				{newLikes} <button onClick={updateBlog}>like</button>
-				<br />
-				{author}
-			</Togglable>
-			{user.username && <button onClick={deleteBlog}>remove</button>}
+			<div className='showWhenVisible'>
+				<Togglable buttonLabel='view'>
+					{url}
+					<br />
+					{newLikes}{' '}
+					<button className='like-btn' onClick={updateBlog}>
+						like
+					</button>
+					<br />
+					{author}
+				</Togglable>
+				{user.username === blog.user.username && (
+					<button className='remove' onClick={deleteBlog}>
+						remove
+					</button>
+				)}
+			</div>
 		</div>
 	)
 }
