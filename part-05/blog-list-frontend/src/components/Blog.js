@@ -1,9 +1,8 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, users }) => {
+const Blog = ({ blog, handleUpdate, handleDelete }) => {
 	const { id, title, author, user, url, likes } = blog
 	const [newLikes, setNewLikes] = useState(likes)
 	const blogStyle = {
@@ -16,7 +15,7 @@ const Blog = ({ blog, users }) => {
 
 	const updateBlog = () => {
 		setNewLikes(newLikes + 1)
-		blogService.update(id, {
+		handleUpdate(id, {
 			user: user._id,
 			likes: newLikes,
 			author: author,
@@ -27,12 +26,12 @@ const Blog = ({ blog, users }) => {
 
 	const deleteBlog = () => {
 		if (window.confirm(`Remove blog: ${blog.title} by ${blog.author}`)) {
-			blogService.deleteBlog(id)
+			handleDelete(id)
 		}
 	}
 
 	return (
-		<div style={blogStyle}>
+		<div className='blog' style={blogStyle}>
 			{title} —
 			<Togglable buttonLabel='view'>
 				{url}
@@ -41,9 +40,7 @@ const Blog = ({ blog, users }) => {
 				<br />
 				{author}
 			</Togglable>
-			{users.username === user.username && (
-				<button onClick={deleteBlog}>remove</button>
-			)}
+			{user.username && <button onClick={deleteBlog}>remove</button>}
 		</div>
 	)
 }
