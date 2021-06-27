@@ -23,7 +23,7 @@ const useResource = (baseUrl) => {
     return request.then((response) => setResources(response.data))
   }
 
-  const create = (resource) => {
+  const create = async (resource) => {
     const response = await axios.post(baseUrl, resource)
     setResources([...resources, response.data])
   }
