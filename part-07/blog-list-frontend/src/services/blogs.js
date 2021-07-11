@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
@@ -25,12 +24,13 @@ const update = (id, newObject) => {
 }
 
 const updateLikes = async (id) => {
-  const blog = await axios.get(`${baseUrl}/${id}`)
+  const config = { headers: { Authorization: token } }
+  const oldBlog = await axios.get(`${baseUrl}/${id}`)
   const newBlog = {
-    ...blog.data,
-    likes: blog.data.likes + 1
+    ...oldBlog.data,
+    likes: oldBlog.data.likes + 1
   }
-  const response = await axios.put(`${baseUrl}/${id}`, newBlog)
+  const response = await axios.put(`${baseUrl}/${id}`, newBlog, config)
   return response.data
 }
 
@@ -40,5 +40,36 @@ const deleteBlog = async (id) => {
   return response.data
 }
 
-const exports = { setToken, getAll, create, update, updateLikes, deleteBlog }
+const createComment = async (id, newObject) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    newObject,
+    config
+  )
+  return response.data
+}
+
+const updateComment = async (id, comment) => {
+  const oldBlog = await axios.get(`${baseUrl}/${id}`)
+  const newBlog = {
+    ...oldBlog.data,
+    comments: oldBlog.data.comments.concat(comment)
+  }
+  const response = await axios.put(`${baseUrl}/${id}`, newBlog)
+  return response.data
+}
+
+const exports = {
+  setToken,
+  getAll,
+  create,
+  update,
+  updateLikes,
+  deleteBlog,
+  createComment,
+  updateComment
+}
 export default exports
