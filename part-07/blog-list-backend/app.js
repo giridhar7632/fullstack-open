@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const middleware = require('./utils/middleware')
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
+app.use(express.static('build'))
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
