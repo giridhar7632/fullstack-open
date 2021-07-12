@@ -9,23 +9,27 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-let timer
-export const setNotification = (message, color, t) => {
-  if (timer) {
-    clearTimeout(timer)
-    timer = null
-  }
-  return (dispatch) => {
+let timeoutId
+
+export const setNotification = (message, type = 'success') => {
+  return async (dispatch) => {
     dispatch({
       type: 'SET_NOTIFICATION',
-      notification: { message: message, color: color }
+      notification: { message, type }
     })
-    timer = setTimeout(() => dispatch(clearNotification()), t * 1000)
+
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    timeoutId = setTimeout(() => {
+      dispatch({
+        type: 'CLEAR_NOTIFICATION'
+      })
+    }, 5000)
   }
 }
 
-export const clearNotification = () => {
-  return { type: 'CLEAR_NOTIFICATION' }
-}
+export const clearNotification = () => ({ type: 'CLEAR_NOTIFICATION' })
 
 export default notificationReducer

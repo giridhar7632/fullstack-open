@@ -1,44 +1,82 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Grid,
-  Typography
-} from '@material-ui/core'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams, useHistory } from 'react-router-dom'
+import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
 
-const useStyles = makeStyles({
-  card: {
-    display: 'flex',
-    margin: '5px 5px 10px 5px',
-    background: 'lightGrey',
-    textAlign: 'center',
-    width: '100%'
-  },
-  cardDetails: {
-    flex: 1
-  },
-  cardMedia: {
-    width: 160
+import { Button, Container, Input, Typography } from '@material-ui/core'
+
+const Comments = ({ comments, handleComment }) => {
+  if (comments.length === 0) {
+    return null
   }
-})
 
-const Blog = ({ blog }) => {
-  const classes = useStyles()
+  const addComment = (event) => {
+    event.preventDefault()
+    const content = event.target.comment.value
+    event.target.comment.value = ''
+    handleComment(content)
+  }
+
   return (
-    <Grid item lg={12} md={6}>
-      <CardActionArea component='a' href={`/blogs/${blog.id}`}>
-        <Card className={classes.card}>
-          <div className={classes.cardDetails}>
-            <CardContent>
-              <Typography>Title: {blog.title}</Typography>
-              <Typography>Author: {blog.author}</Typography>
-            </CardContent>
-          </div>
-        </Card>
-      </CardActionArea>
-    </Grid>
+    <Container>
+      <Typography variant='h3'>comments</Typography>
+      <form onSubmit={addComment}>
+        <Input name='comment' />
+        <Button type='submit'>add comment</Button>
+      </form>
+      {comments.map((c, i) => (
+        <p key={i}>{c}</p>
+      ))}
+    </Container>
+  )
+}
+
+const Blog = () => {
+  const id = useParams().id
+  const blog = useSelector((state) => state.blogs.find((b) => b.id === id))
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  if (!blog) {
+    return null
+  }
+
+  const own = user && user.username === blog.user.username
+
+  const handleLike = () => {
+    dispatch(likeBlog(blog))
+  }
+
+  const handleRemove = () => {
+    const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+    if (ok) {
+      dispatch(removeBlog(id))
+      history.push('/')
+    }
+  }
+
+  const handleComment = (comment) => {
+    dispatch(commentBlog(id, comment))
+  }
+
+  return (
+    <div className='blog'>
+      <h3>
+        {blog.title} by {blog.author}
+      </h3>
+      <div>
+        <div>
+          <a href={blog.url}>{blog.url}</a>
+        </div>
+        <div>
+          likes {blog.likes}
+          <button onClick={handleLike}>like</button>
+        </div>
+        {own && <button onClick={handleRemove}>remove</button>}
+        <Comments comments={blog.comments} handleComment={handleComment} />
+      </div>
+    </div>
   )
 }
 

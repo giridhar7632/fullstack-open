@@ -52,16 +52,6 @@ const createComment = async (id, newObject) => {
   return response.data
 }
 
-const updateComment = async (id, comment) => {
-  const oldBlog = await axios.get(`${baseUrl}/${id}`)
-  const newBlog = {
-    ...oldBlog.data,
-    comments: oldBlog.data.comments.concat(comment)
-  }
-  const response = await axios.put(`${baseUrl}/${id}`, newBlog)
-  return response.data
-}
-
 const exports = {
   setToken,
   getAll,
@@ -69,7 +59,6 @@ const exports = {
   update,
   updateLikes,
   deleteBlog,
-  createComment,
-  updateComment
+  createComment
 }
 export default exports
